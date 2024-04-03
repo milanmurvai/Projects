@@ -46,7 +46,7 @@ public class LogInSignupController {
         this.service = service;
         loginPane.setVisible(true);
         signupPane.setVisible(false);
-        emailLoginTextField.setText("dariamarian15@gmail.com");
+        emailLoginTextField.setText("murvaimilan@gmail.com");
     }
     @FXML
     public void onLogInButtonAction() {

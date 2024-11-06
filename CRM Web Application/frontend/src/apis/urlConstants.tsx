@@ -1,0 +1,9 @@
+const baseUrl = 'http://localhost:8080';
+export const signupUrl = `${baseUrl}/signup`;
+export const loginUrl = `${baseUrl}/login`;
+export const usersUrl = `${baseUrl}/users`;
+export const projectsUrl = `${baseUrl}/projects`;
+export const materialsUrl = `${baseUrl}/materials`;
+export const clientsUrl = `${baseUrl}/clients`;
+export const activitiesUrl = `${baseUrl}/activities`;
+export const employeesUrl = `${baseUrl}/employees`;

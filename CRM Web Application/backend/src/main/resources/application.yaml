@@ -1,0 +1,28 @@
+spring:
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+      ddl-auto: none
+    open-in-view: false
+
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USER}
+    password: ${DATASOURCE_PASS}
+    driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    change-log: classpath:db.changelog/changelog-master.xml
+
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          DEBUG

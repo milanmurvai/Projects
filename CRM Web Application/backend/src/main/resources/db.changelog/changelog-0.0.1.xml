@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.8.xsd">
+
+    <changeSet id="20241007162800" author="milan">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="app_user"/>
+            </not>
+        </preConditions>
+        <createTable tableName="app_user">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20241007162900" author="milan">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="app_user"/>
+        </preConditions>
+        <insert tableName="app_user">
+            <column name="username" value="milan"/>
+            <column name="name" value="Milan Murvai"/>
+            <column name="password" value="mml80"/>
+            <column name="type" value="ADMIN"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20241007181800" author="milan">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="client"/>
+            </not>
+        </preConditions>
+        <createTable tableName="client">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20241007181900" author="milan">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="material"/>
+            </not>
+        </preConditions>
+        <createTable tableName="material">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="coefficient" type="double">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20241007185700" author="milan">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="project"/>
+            </not>
+        </preConditions>
+        <createTable tableName="project">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="client_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hours" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="advance" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="invoice" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="limit_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="project"
+                baseColumnNames="client_id"
+                referencedTableName="client"
+                referencedColumnNames="id"
+                constraintName="fk_project_client"/>
+    </changeSet>
+
+    <changeSet id="20241007185800" author="milan">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_project"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user_project">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="user_project"
+                baseColumnNames="user_id"
+                referencedTableName="app_user"
+                referencedColumnNames="id"
+                constraintName="fk_user_project_user"/>
+
+        <addForeignKeyConstraint
+                baseTableName="user_project"
+                baseColumnNames="project_id"
+                referencedTableName="project"
+                referencedColumnNames="id"
+                constraintName="fk_user_project_project"/>
+
+        <addPrimaryKey columnNames="user_id, project_id"
+                       tableName="user_project"
+                       constraintName="pk_user_project"/>
+    </changeSet>
+
+    <changeSet id="20241007185900" author="milan">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="project_material"/>
+            </not>
+        </preConditions>
+        <createTable tableName="project_material">
+            <column name="project_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="material_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="double">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="project_material"
+                baseColumnNames="project_id"
+                referencedTableName="project"
+                referencedColumnNames="id"
+                constraintName="fk_project_material_project"/>
+
+        <addForeignKeyConstraint
+                baseTableName="project_material"
+                baseColumnNames="material_id"
+                referencedTableName="material"
+                referencedColumnNames="id"
+                constraintName="fk_project_material_material"/>
+
+        <addPrimaryKey columnNames="project_id, material_id"
+                       tableName="project_material"
+                       constraintName="pk_project_material"/>
+    </changeSet>
+
+    <changeSet id="20241009231700" author="milan">
+        <preConditions>
+            <tableExists tableName="project_material"/>
+            <primaryKeyExists tableName="project_material" primaryKeyName="pk_project_material"/>
+        </preConditions>
+        <dropPrimaryKey tableName="project_material"/>
+        <addColumn tableName="project_material">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20241009233300" author="milan">
+        <preConditions>
+            <not>
+                <tableExists tableName="activity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="activity">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hours" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="details" type="varchar(256)"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="activity"
+                baseColumnNames="user_id"
+                referencedTableName="app_user"
+                referencedColumnNames="id"
+                constraintName="fk_activity_user"/>
+
+        <addForeignKeyConstraint
+                baseTableName="activity"
+                baseColumnNames="project_id"
+                referencedTableName="project"
+                referencedColumnNames="id"
+                constraintName="fk_activity_project"/>
+    </changeSet>
+
+    <changeSet id="20241009235700" author="milan">
+        <preConditions>
+            <columnExists tableName="project" columnName="hours"/>
+        </preConditions>
+        <modifyDataType tableName="project" columnName="hours" newDataType="double"/>
+    </changeSet>
+
+    <changeSet id="20241015193600" author="milan">
+        <preConditions>
+            <tableExists tableName="project_material"/>
+            <tableExists tableName="project"/>
+        </preConditions>
+        <addColumn tableName="project_material">
+            <column name="total" type="double"/>
+        </addColumn>
+        <addColumn tableName="project">
+            <column name="total_amount" type="double"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20241029223100" author="milan">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="employee"/>
+            </not>
+        </preConditions>
+        <createTable tableName="employee">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="coefficient" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cost_coefficient" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
